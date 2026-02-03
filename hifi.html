@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>HiFi 装备与听感 | 周子的音频实验室</title>
+    <style>
+        body { 
+            background: #0a0a0a; 
+            color: #00ff41; 
+            font-family: "Courier New", monospace;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 { 
+            text-align: center; 
+            text-shadow: 0 0 15px #00ff41;
+            border-bottom: 2px solid #00ff41;
+            padding-bottom: 20px;
+        }
+        h2 { 
+            color: #00cc33; 
+            margin-top: 40px;
+            text-shadow: 0 0 5px #00cc33;
+        }
+        .gear-item {
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px solid #00ff41;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            transition: all 0.3s;
+        }
+        .gear-item:hover {
+            background: rgba(0, 255, 65, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+            transform: translateX(10px);
+        }
+        .device-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .tag {
+            display: inline-block;
+            background: #00ff41;
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-right: 8px;
+        }
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #00ff41;
+            text-decoration: none;
+            border: 1px solid #00ff41;
+            padding: 8px 16px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.8);
+        }
+        .back-link:hover {
+            background: #00ff41;
+            color: #000;
+        }
+        .frequency-graph {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(90deg, #0a0a0a 0%, #00ff41 50%, #0a0a0a 100%);
+            opacity: 0.3;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← 返回首页</a>
+    
+    <h1>🎧 HiFi 装备实验室</h1>
+    
+    <p style="text-align: center; opacity: 0.8;">
+        "学了一辈子乐器，二十岁才入门HiFi"<br>
+        当前前端：NK1 MAX + Foobar2000 + ASIO
+    </p>
+
+    <h2>🎯 现役装备</h2>
+    
+    <div class="gear-item">
+        <div class="device-name">NICEHCK DB2 <span class="tag">入耳首选</span></div>
+        <p><strong>配置：</strong>1圈1铁混合单元 | 10mm石墨烯动圈</p>
+        <p><strong>听感笔记：</strong></p>
+        <ul>
+            <li>钢琴表现惊人，能清晰听到<strong>击锤冲击感</strong>和<strong>键盘机械摩擦</strong></li>
+            <li>琴弦余震层次分明，上音10级曲目能分辨踏板深浅</li>
+            <li>低频下潜深但不过量，比FreeBuds Pro 2更紧致</li>
+            <li>人声位置适中，适合听古典器乐和小编制爵士</li>
+        </ul>
+        <div class="frequency-graph" title="频响示意：低频下沉，中高频清晰"></div>
+    </div>
+
+    <div class="gear-item">
+        <div class="device-name">Huawei FreeBuds Pro 2 <span class="tag">出门通勤</span></div>
+        <p><strong>配置：</strong>双单元（11mm四磁动圈+微平板高音）</p>
+        <p><strong>使用场景：</strong>地铁/高铁降噪， convenience > fidelity</p>
+        <p><strong>对比DB2：</strong>低频量感更多但略糊，声场较小，适合流行电子。胜在方便，出街不心疼。</p>
+    </div>
+
+    <div class="gear-item">
+        <div class="device-name">NK1 MAX 小尾巴 <span class="tag">解码耳放</span></div>
+        <p><strong>芯片：</strong>CS43131 | <strong>输出：</strong>单端3.5mm</p>
+        <p>推DB2绰绰有余，背景干净无底噪。对比直插手机Type-C，细节明显更丰富。</p>
+    </div>
+
+    <div class="gear-item">
+        <div class="device-name">原道酱 / 原道姬 <span class="tag">备用/对比</span></div>
+        <p>9.9元性价比神塞，用来AB测试前端改善程度。DB2确实是一耳朵提升，尤其高频延展。</p>
+    </div>
+
+    <h2>🎹 钢琴录音测试曲目</h2>
+    <p>自己在录音室录制的演奏片段，用于横向对比设备：</p>
+    <ul>
+        <li>肖邦练习曲 Op.10 No.4（激流）- 测试高频瞬态</li>
+        <li>拉赫玛尼诺夫前奏曲 Op.23 No.5（g小调）- 测试低频控制力</li>
+        <li>德彪西《月光》- 测试声场和泛音</li>
+    </ul>
+    <p><em>（注：录音文件太大，GitHub Pages放不了，后续考虑放网盘链接）</em></p>
+
+    <h2>💡 入门心得</h2>
+    <ol>
+        <li><strong>别急着上大奥：</strong>听过父亲的STAX大奥一代，确实无敌，但"山猪吃不来细糠"，先从DB2这种入门HiFi建立听音观</li>
+        <li><strong>前端很重要：</strong>同样DB2，直插手机和加NK1 MAX是两副耳机</li>
+        <li><strong>音源别偷懒：</strong>QQ音乐SQ（20MB左右）够用，臻品母带体积太大提升有限</li>
+        <li><strong>Windows音频：</strong>Foobar2000 + ASIO驱动，绕过系统重采样，音质纯净</li>
+    </ol>
+
+    <footer style="margin-top: 60px; text-align: center; opacity: 0.6; font-size: 0.9em;">
+        <p>最后更新：2026年2月 | 使用 GitHub Pages 部署</p>
+    </footer>
+</body>
+</html>

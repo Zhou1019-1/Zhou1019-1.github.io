@@ -185,11 +185,40 @@
             text-decoration: underline;
         }
         
+        /* 留言板区域 */
+        .guestbook {
+            margin-top: 80px;
+            padding: 40px 30px;
+            border-top: 2px solid #00ff41;
+            border-bottom: 2px solid #00ff41;
+            background: rgba(0, 20, 0, 0.5);
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .guestbook h2 {
+            color: #00ff41;
+            text-shadow: 0 0 10px #00ff41;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        
+        .guestbook-desc {
+            opacity: 0.8;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+            color: #88ffaa;
+        }
+        
+        /* Utterances 适配暗黑主题 */
+        .utterances {
+            max-width: 100% !important;
+        }
+        
         /* 页脚 */
         footer {
-            margin-top: 80px;
+            margin-top: 60px;
             padding-top: 30px;
-            border-top: 1px solid rgba(0, 255, 65, 0.2);
             font-size: 0.9em;
             opacity: 0.6;
         }
@@ -204,6 +233,7 @@
         @media (max-width: 600px) {
             h1 { font-size: 2em; }
             .nav-grid { grid-template-columns: 1fr; }
+            .guestbook { padding: 30px 15px; }
         }
     </style>
 </head>
@@ -262,6 +292,24 @@
             </div>
         </div>
         
+        <!-- 访客留言板 -->
+        <div class="guestbook">
+            <h2>💬 访客留言板</h2>
+            <p class="guestbook-desc">
+                使用 GitHub 账号登录即可留言，支持 Markdown 语法和表情回复<br>
+                每条留言都会在我的仓库 Issues 中存档
+            </p>
+            
+            <script src="https://utteranc.es/client.js"
+                    repo="Zhou1019-1/Zhou1019-1.github.io"
+                    issue-term="pathname"
+                    label="💬评论"
+                    theme="github-dark"
+                    crossorigin="anonymous"
+                    async>
+            </script>
+        </div>
+
         <footer>
             <p>Built with GitHub Pages | Hosted for free</p>
             <p class="time-display" id="current-time">加载中...</p>

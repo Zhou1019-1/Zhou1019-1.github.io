@@ -1,338 +1,654 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>周的数字花园 | Zhou's Digital Garden</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #0f0f12;
+            --surface: #1a1a1f;
+            --surface-hover: #25252b;
+            --text: #e8e6e3;
+            --text-secondary: #9a9590;
+            --accent: #7fb069;
+            --accent-dim: #5a8a4a;
+            --border: #2a2a30;
+            --card-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            --radius: 16px;
+            --font-serif: 'Noto Serif SC', serif;
+            --font-mono: 'JetBrains Mono', monospace;
         }
-        
+
+        [data-theme="light"] {
+            --bg: #f5f3f0;
+            --surface: #ffffff;
+            --surface-hover: #f0eeeb;
+            --text: #1a1a1a;
+            --text-secondary: #6b6560;
+            --accent: #5a8a4a;
+            --accent-dim: #7fb069;
+            --border: #e0ddd8;
+            --card-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background: #050505;
-            color: #00ff41;
-            font-family: "Courier New", Courier, monospace;
-            min-height: 100vh;
-            overflow-x: hidden;
+            font-family: var(--font-serif);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            transition: background 0.3s, color 0.3s;
         }
-        
-        /* 背景动画网格 */
-        .bg-grid {
+
+        /* 导航 */
+        nav {
             position: fixed;
             top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: 0;
+            backdrop-filter: blur(20px);
+            background: rgba(15,15,18,0.8);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            padding: 1rem 0;
         }
-        
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 900px;
+
+        [data-theme="light"] nav {
+            background: rgba(245,243,240,0.8);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 60px 20px;
-            text-align: center;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        
-        /* 主标题 */
-        h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
-            animation: flicker 3s infinite;
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
         }
-        
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.95; }
-            52% { opacity: 0.5; }
-            54% { opacity: 1; }
+
+        .logo span { color: var(--accent); }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
         }
-        
-        .subtitle {
-            font-size: 1.1em;
-            opacity: 0.8;
-            margin-bottom: 50px;
-            color: #00cc33;
-        }
-        
-        /* 导航卡片网格 */
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-        
-        .nav-card {
-            background: rgba(0, 255, 65, 0.05);
-            border: 1px solid #00ff41;
-            border-radius: 10px;
-            padding: 30px;
+
+        .nav-links a {
+            color: var(--text-secondary);
             text-decoration: none;
-            color: #00ff41;
-            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
             position: relative;
             overflow: hidden;
-            cursor: pointer;
         }
-        
-        .nav-card:hover {
-            background: rgba(0, 255, 65, 0.1);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.2);
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(127,176,105,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(127,176,105,0.05) 0%, transparent 40%);
+            pointer-events: none;
         }
-        
-        .nav-card::before {
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            margin-bottom: 2rem;
+            object-fit: cover;
+            box-shadow: 0 0 40px rgba(127,176,105,0.2);
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .hero .tagline {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            letter-spacing: 0.15em;
+        }
+
+        .identity-badges {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .badge {
+            padding: 0.5rem 1.2rem;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .badge:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            animation: bounce 2s infinite;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* 内容区 */
+        section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .section-title .icon {
+            font-size: 1.5rem;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        /* 项目网格 */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
+            left: 0;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
-            transition: left 0.5s;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
-        
-        .nav-card:hover::before {
-            left: 100%;
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow);
+            border-color: var(--accent-dim);
         }
-        
-        .card-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-            display: block;
+
+        .project-card:hover::before { opacity: 1; }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.8rem;
         }
-        
-        .card-title {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-            color: #fff;
-        }
-        
-        .card-desc {
-            font-size: 0.9em;
-            opacity: 0.8;
-            line-height: 1.6;
-        }
-        
-        .card-tag {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 5px 12px;
-            border: 1px solid #00ff41;
-            border-radius: 20px;
-            font-size: 0.8em;
-            background: rgba(0, 255, 65, 0.1);
-        }
-        
-        /* 特色文章预览 */
-        .featured {
-            margin: 50px 0;
-            padding: 30px;
-            border: 1px dashed rgba(0, 255, 65, 0.3);
-            border-radius: 10px;
-            background: rgba(0, 20, 0, 0.3);
-            text-align: left;
-        }
-        
-        .featured-header {
+
+        .project-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
-            gap: 10px;
+            gap: 0.5rem;
         }
-        
-        .featured-label {
-            background: #00ff41;
-            color: #000;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-size: 0.8em;
-            font-weight: bold;
+
+        .project-name:hover { color: var(--accent); }
+
+        .project-name::before {
+            content: '📁';
+            font-size: 0.9rem;
         }
-        
-        .featured-title {
-            font-size: 1.3em;
-            color: #fff;
+
+        .project-stats {
+            display: flex;
+            gap: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
         }
-        
-        .featured-excerpt {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.8;
-            opacity: 0.9;
-            margin-bottom: 15px;
-            border-left: 3px solid #00ff41;
-            padding-left: 15px;
+
+        .stat { display: flex; align-items: center; gap: 0.3rem; }
+
+        .project-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+            min-height: 3em;
         }
-        
-        .read-more {
-            color: #00ff41;
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .lang-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .lang-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .updated-at {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* 特色板块 */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .feature-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--accent);
             text-decoration: none;
-            font-weight: bold;
+            font-size: 0.85rem;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
         }
-        
-        .read-more:hover {
-            text-decoration: underline;
-        }
-        
-        /* 留言板区域 */
+
+        .feature-link:hover { border-bottom-color: var(--accent); }
+
+        /* 留言板 */
         .guestbook {
-            margin-top: 80px;
-            padding: 40px 30px;
-            border-top: 2px solid #00ff41;
-            border-bottom: 2px solid #00ff41;
-            background: rgba(0, 20, 0, 0.5);
-            border-radius: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 3rem;
             text-align: center;
         }
-        
-        .guestbook h2 {
-            color: #00ff41;
-            text-shadow: 0 0 10px #00ff41;
-            margin-bottom: 10px;
-            font-size: 2em;
+
+        .guestbook-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+        .guestbook a {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.8rem 2rem;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 700;
+            transition: all 0.3s;
         }
-        
-        .guestbook-desc {
-            opacity: 0.8;
-            margin-bottom: 30px;
-            font-size: 0.9em;
-            color: #88ffaa;
+
+        .guestbook a:hover {
+            background: var(--accent-dim);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(127,176,105,0.3);
         }
-        
-        /* Utterances 适配暗黑主题 */
-        .utterances {
-            max-width: 100% !important;
-        }
-        
+
         /* 页脚 */
         footer {
-            margin-top: 60px;
-            padding-top: 30px;
-            font-size: 0.9em;
-            opacity: 0.6;
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
         }
-        
-        .time-display {
-            font-family: monospace;
-            margin-top: 10px;
-            color: #00cc33;
+
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
         }
-        
-        /* 移动端适配 */
-        @media (max-width: 600px) {
-            h1 { font-size: 2em; }
-            .nav-grid { grid-template-columns: 1fr; }
-            .guestbook { padding: 30px 15px; }
+
+        .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .error-msg {
+            text-align: center;
+            padding: 2rem;
+            color: #c75c5c;
+        }
+
+        /* 语言颜色映射 */
+        .lang-JavaScript { background: #f1e05a; }
+        .lang-HTML { background: #e34c26; }
+        .lang-CSS { background: #563d7c; }
+        .lang-Python { background: #3572A5; }
+        .lang-Java { background: #b07219; }
+        .lang-TypeScript { background: #3178c6; }
+        .lang-Vue { background: #41b883; }
+        .lang-Go { background: #00ADD8; }
+        .lang-Rust { background: #dea584; }
+        .lang-C\+\+ { background: #f34b7d; }
+        .lang-C { background: #555555; }
+        .lang-Shell { background: #89e051; }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .nav-links { gap: 1rem; }
+            .nav-links a:not(.nav-cta) { display: none; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .features { grid-template-columns: 1fr; }
+            section { padding: 3rem 1.5rem; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-grid"></div>
-    
-    <div class="container">
+
+    <nav>
+        <div class="nav-inner">
+            <div class="logo">周的<span>数字花园</span></div>
+            <div class="nav-links">
+                <a href="#projects">项目</a>
+                <a href="#features">探索</a>
+                <a href="#guestbook">留言</a>
+                <a href="https://github.com/Zhou1019-1" target="_blank">GitHub</a>
+                <button class="theme-toggle" onclick="toggleTheme()">🌓 切换</button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <img src="https://github.com/Zhou1019-1.png" alt="Avatar" class="avatar" onerror="this.style.display='none'">
         <h1>周的数字花园</h1>
-        <p class="subtitle">钢琴十级 · 代码学徒 · 声学漫游者</p>
-        
-        <!-- 特色文章预览区 -->
-        <div class="featured">
-            <div class="featured-header">
-                <span class="featured-label">最新文章</span>
-                <span class="featured-title">声学漫游者手记：从DB2到造物主</span>
-            </div>
-            <p class="featured-excerpt">
-                "最初我以为这只是关于两个设备的简单比较。但很快我发现，我真正想知道的从来不是'哪个更好'，而是'它们各自向我提案了怎样的听觉现实'..."
-            </p>
-            <a href="hifi.html" class="read-more">阅读全文 →</a>
+        <p class="tagline">钢琴十级 · 代码学徒 · 声学漫游者</p>
+        <div class="identity-badges">
+            <span class="badge">🎹 钢琴演奏</span>
+            <span class="badge">🎧 HiFi 声学</span>
+            <span class="badge">💻 全栈开发</span>
+            <span class="badge">📚 考研备考</span>
         </div>
-        
-        <!-- 导航卡片 -->
-        <div class="nav-grid">
-            <a href="hifi.html" class="nav-card">
-                <span class="card-icon">🎧</span>
-                <div class="card-title">HiFi 实验室</div>
-                <div class="card-desc">
-                    装备评测 · 听感笔记<br>
-                    DB2 / FreeBuds Pro 2 / 原道酱<br>
-                    <em>《声学漫游者手记》长文</em>
-                </div>
-                <div class="card-tag">进入实验室</div>
-            </a>
-            
-            <div class="nav-card" style="opacity: 0.6; cursor: not-allowed;">
-                <span class="card-icon">🎹</span>
-                <div class="card-title">钢琴录音室</div>
-                <div class="card-desc">
-                    肖邦练习曲 · 拉赫玛尼诺夫<br>
-                    录音室原始音频<br>
-                    <em>建设中...</em>
-                </div>
-                <div class="card-tag" style="opacity: 0.5">敬请期待</div>
-            </div>
-            
-            <div class="nav-card" style="opacity: 0.6; cursor: not-allowed;">
-                <span class="card-icon">💻</span>
-                <div class="card-title">技术杂烩</div>
-                <div class="card-desc">
-                    鸿蒙刷机 · 音频配置<br>
-                    GitHub Pages 建站笔记<br>
-                    <em>建设中...</em>
-                </div>
-                <div class="card-tag" style="opacity: 0.5">敬请期待</div>
+        <div class="scroll-hint">↓</div>
+    </header>
+
+    <section id="projects">
+        <h2 class="section-title"><span class="icon">💻</span> 开源项目</h2>
+        <p class="section-desc">以下项目自动从 GitHub 同步，实时展示我的全部公开仓库。</p>
+        <div id="projects-container" class="projects-grid">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>正在从 GitHub 拉取项目数据...</p>
             </div>
         </div>
-        
-        <!-- 访客留言板 -->
+    </section>
+
+    <section id="features">
+        <h2 class="section-title"><span class="icon">🌿</span> 花园分区</h2>
+        <p class="section-desc">在这里，我记录不同领域的探索与思考。</p>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🎧</div>
+                <h3 class="feature-title">HiFi 实验室</h3>
+                <p class="feature-desc">装备评测 · 听感笔记 · 声学漫游者手记<br>DB2 / FreeBuds Pro 2 / 原道酱</p>
+                <a href="#" class="feature-link">进入实验室 →</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎹</div>
+                <h3 class="feature-title">钢琴录音室</h3>
+                <p class="feature-desc">肖邦练习曲 · 拉赫玛尼诺夫<br>原始录音与演奏心得</p>
+                <a href="#" class="feature-link">进入录音室 →</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚙️</div>
+                <h3 class="feature-title">技术杂烩</h3>
+                <p class="feature-desc">鸿蒙刷机 · 音频配置 · GitHub Pages 建站<br>开源工具与折腾记录</p>
+                <a href="#" class="feature-link">查看笔记 →</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="guestbook">
         <div class="guestbook">
-            <h2>💬 访客留言板</h2>
-            <p class="guestbook-desc">
-                使用 GitHub 账号登录即可留言，支持 Markdown 语法和表情回复<br>
+            <div class="guestbook-icon">💬</div>
+            <h2>访客留言板</h2>
+            <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                使用 GitHub 账号登录即可留言<br>
+                支持 Markdown 语法和表情回复<br>
                 每条留言都会在我的仓库 Issues 中存档
             </p>
-            
-            <script src="https://utteranc.es/client.js"
-                    repo="Zhou1019-1/Zhou1019-1.github.io"
-                    issue-term="pathname"
-                    label="💬评论"
-                    theme="github-dark"
-                    crossorigin="anonymous"
-                    async>
-            </script>
+            <a href="https://github.com/Zhou1019-1/Zhou1019-1.github.io/issues" target="_blank">
+                前往留言
+            </a>
         </div>
+    </section>
 
-        <footer>
-            <p>Built with GitHub Pages | Hosted for free</p>
-            <p class="time-display" id="current-time">加载中...</p>
-        </footer>
-    </div>
-    
+    <footer>
+        <p>🌱 周的数字花园 · 用代码浇灌兴趣 · 用音符填充生活</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="https://github.com/Zhou1019-1" target="_blank">GitHub</a> · 
+            <a href="https://zhou1019-1.github.io" target="_blank">数字花园</a>
+        </p>
+        <p style="margin-top: 1rem; font-size: 0.75rem; opacity: 0.6;">
+            项目数据通过 GitHub API 实时获取 · 最后更新：<span id="last-update">--</span>
+        </p>
+    </footer>
+
     <script>
-        function updateTime() {
-            const now = new Date();
-            const timeStr = now.toLocaleString('zh-CN', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            });
-            document.getElementById('current-time').textContent = 
-                '系统时间：' + timeStr + ' | 运行正常';
+        // 主题切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+            localStorage.setItem('theme', current === 'dark' ? 'light' : 'dark');
         }
-        updateTime();
-        setInterval(updateTime, 1000);
+
+        // 恢复主题
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // 获取 GitHub 项目
+        async function fetchProjects() {
+            const container = document.getElementById('projects-container');
+            const username = 'Zhou1019-1';
+            
+            try {
+                const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+                
+                if (!response.ok) {
+                    throw new Error(`GitHub API 错误: ${response.status}`);
+                }
+                
+                const repos = await response.json();
+                
+                // 过滤掉 github.io 仓库本身（可选）
+                const filtered = repos.filter(r => r.name !== `${username}.github.io`);
+                
+                if (filtered.length === 0) {
+                    container.innerHTML = '<div class="loading"><p>暂无公开项目</p></div>';
+                    return;
+                }
+                
+                container.innerHTML = filtered.map(repo => {
+                    const lang = repo.language || 'Unknown';
+                    const langClass = `lang-${lang.replace(/\+/g, '\\+')}`;
+                    const date = new Date(repo.updated_at).toLocaleDateString('zh-CN');
+                    const desc = repo.description || '暂无描述';
+                    
+                    return `
+                        <div class="project-card">
+                            <div class="project-header">
+                                <a href="${repo.html_url}" target="_blank" class="project-name">${repo.name}</a>
+                                <div class="project-stats">
+                                    <span class="stat">⭐ ${repo.stargazers_count}</span>
+                                    <span class="stat">⑂ ${repo.forks_count}</span>
+                                </div>
+                            </div>
+                            <p class="project-desc">${desc}</p>
+                            <div class="project-meta">
+                                <span class="lang-badge">
+                                    <span class="lang-dot ${langClass}"></span>
+                                    ${lang}
+                                </span>
+                                <span class="updated-at">更新于 ${date}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                document.getElementById('last-update').textContent = new Date().toLocaleString('zh-CN');
+                
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="error-msg">
+                        <p>⚠️ 无法加载项目数据</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">${error.message}</p>
+                        <p style="font-size: 0.8rem; margin-top: 1rem;">
+                            请检查网络连接，或<a href="https://github.com/Zhou1019-1" target="_blank" style="color: var(--accent);">直接访问 GitHub</a>
+                        </p>
+                    </div>
+                `;
+            }
+        }
+
+        // 页面加载完成后获取项目
+        document.addEventListener('DOMContentLoaded', fetchProjects);
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
     </script>
 </body>
 </html>

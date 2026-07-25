@@ -1,329 +1,1209 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <title>HiFi 装备与听感 | 周子的音频实验室</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>周的数字花园 | Zhou's Digital Garden</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; }
-        
-        body { 
-            background: #0a0a0a; 
-            color: #00ff41; 
-            font-family: "Courier New", monospace;
+        :root {
+            --bg: #0f0f12;
+            --surface: #1a1a1f;
+            --surface-hover: #25252b;
+            --text: #e8e6e3;
+            --text-secondary: #9a9590;
+            --accent: #7fb069;
+            --accent-dim: #5a8a4a;
+            --border: #2a2a30;
+            --card-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            --radius: 16px;
+            --font-serif: 'Noto Serif SC', serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f3f0;
+            --surface: #ffffff;
+            --surface-hover: #f0eeeb;
+            --text: #1a1a1a;
+            --text-secondary: #6b6560;
+            --accent: #5a8a4a;
+            --accent-dim: #7fb069;
+            --border: #e0ddd8;
+            --card-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-serif);
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.8;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
+            transition: background 0.3s, color 0.3s;
         }
-        
-        h1 { 
-            text-align: center; 
-            text-shadow: 0 0 15px #00ff41;
-            border-bottom: 2px solid #00ff41;
-            padding-bottom: 20px;
-        }
-        
-        h2 { 
-            color: #00cc33; 
-            margin-top: 50px;
-            text-shadow: 0 0 5px #00cc33;
-            border-left: 4px solid #00ff41;
-            padding-left: 15px;
-        }
-        
-        /* 导航栏 */
-        .nav {
-            position: sticky;
+
+        nav {
+            position: fixed;
             top: 0;
-            background: rgba(10, 10, 10, 0.95);
-            padding: 15px 0;
-            border-bottom: 1px solid #00ff41;
-            margin-bottom: 30px;
+            width: 100%;
+            backdrop-filter: blur(20px);
+            background: rgba(15,15,18,0.8);
+            border-bottom: 1px solid var(--border);
             z-index: 100;
+            padding: 1rem 0;
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(245,243,240,0.8);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+
+        .logo span { color: var(--accent); }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(127,176,105,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(127,176,105,0.05) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            margin-bottom: 2rem;
+            object-fit: cover;
+            box-shadow: 0 0 40px rgba(127,176,105,0.2);
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .hero .tagline {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            letter-spacing: 0.15em;
+        }
+
+        .identity-badges {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .badge {
+            padding: 0.5rem 1.2rem;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .badge:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            animation: bounce 2s infinite;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .section-title .icon {
+            font-size: 1.5rem;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow);
+            border-color: var(--accent-dim);
+        }
+
+        .project-card:hover::before { opacity: 1; }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.8rem;
+        }
+
+        .project-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-name:hover { color: var(--accent); }
+
+        .project-name::before {
+            content: '📁';
+            font-size: 0.9rem;
+        }
+
+        .project-stats {
+            display: flex;
+            gap: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .stat { display: flex; align-items: center; gap: 0.3rem; }
+
+        .project-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+            min-height: 3em;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .lang-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .lang-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .updated-at {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .feature-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .feature-link:hover { border-bottom-color: var(--accent); }
+
+        .guestbook {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 3rem;
             text-align: center;
         }
-        
-        .nav a {
-            color: #00ff41;
-            text-decoration: none;
-            margin: 0 15px;
-            padding: 5px 10px;
-            border: 1px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .nav a:hover {
-            border: 1px solid #00ff41;
-            background: rgba(0, 255, 65, 0.1);
-        }
-        
-        .gear-item {
-            background: rgba(0, 255, 65, 0.05);
-            border: 1px solid #00ff41;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            transition: all 0.3s;
-        }
-        
-        .gear-item:hover {
-            background: rgba(0, 255, 65, 0.1);
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-            transform: translateX(10px);
-        }
-        
-        .device-name {
-            font-size: 1.3em;
-            font-weight: bold;
+
+        .guestbook-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+        .guestbook a {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.8rem 2rem;
+            background: var(--accent);
             color: #fff;
-            margin-bottom: 10px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 700;
+            transition: all 0.3s;
         }
-        
+
+        .guestbook a:hover {
+            background: var(--accent-dim);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(127,176,105,0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+        }
+
+        footer a { color: var(--accent); text-decoration: none; }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .error-msg {
+            text-align: center;
+            padding: 2rem;
+            color: #c75c5c;
+        }
+
+        .lang-JavaScript { background: #f1e05a; }
+        .lang-HTML { background: #e34c26; }
+        .lang-CSS { background: #563d7c; }
+        .lang-Python { background: #3572A5; }
+        .lang-Java { background: #b07219; }
+        .lang-TypeScript { background: #3178c6; }
+        .lang-Vue { background: #41b883; }
+        .lang-Go { background: #00ADD8; }
+        .lang-Rust { background: #dea584; }
+        .lang-C\+\+ { background: #f34b7d; }
+        .lang-C { background: #555555; }
+        .lang-Shell { background: #89e051; }
+
+        @media (max-width: 768px) {
+            .nav-links { gap: 1rem; }
+            .nav-links a:not(.nav-cta) { display: none; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .features { grid-template-columns: 1fr; }
+            section { padding: 3rem 1.5rem; }
+        }
+
+        /* HiFi Lab Specific Styles */
+        .hifi-hero {
+            text-align: center;
+            padding: 6rem 2rem 3rem;
+            position: relative;
+        }
+
+        .hifi-hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            margin-bottom: 0.5rem;
+        }
+
+        .hifi-hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .gear-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .gear-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gear-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--card-shadow);
+            border-color: var(--accent-dim);
+        }
+
+        .gear-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .gear-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .gear-brand {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.2rem;
+        }
+
+        .gear-type {
+            padding: 0.3rem 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+        }
+
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .specs-table th,
+        .specs-table td {
+            padding: 0.7rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .specs-table th {
+            color: var(--accent);
+            font-weight: 700;
+            width: 30%;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+        }
+
+        .specs-table td {
+            color: var(--text-secondary);
+        }
+
+        .review-text {
+            color: var(--text);
+            line-height: 2;
+            font-size: 0.95rem;
+            margin-top: 1.5rem;
+        }
+
+        .review-text p {
+            margin-bottom: 1rem;
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .test-env {
+            background: var(--surface-hover);
+            border-left: 3px solid var(--accent);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .test-env strong {
+            color: var(--text);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .comparison-table thead th {
+            background: var(--surface-hover);
+            color: var(--accent);
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--accent);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .comparison-table tbody td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+            vertical-align: top;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--surface-hover);
+        }
+
+        .device-name {
+            color: var(--text);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
         .tag {
             display: inline-block;
-            background: #00ff41;
-            color: #000;
-            padding: 2px 8px;
+            padding: 0.15rem 0.5rem;
             border-radius: 4px;
-            font-size: 0.8em;
-            margin-right: 8px;
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            margin-right: 0.3rem;
         }
-        
-        /* 文章专用样式 */
-        .essay {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 2;
-            color: #e0e0e0;
-            background: rgba(0, 20, 0, 0.3);
-            padding: 30px;
-            border-radius: 10px;
-            margin-top: 30px;
-            border: 1px solid rgba(0, 255, 65, 0.3);
-        }
-        
-        .essay h3 {
-            color: #00ff41;
-            margin-top: 40px;
-            margin-bottom: 20px;
-            font-size: 1.4em;
-            font-family: "Courier New", monospace;
-            border-bottom: 1px dashed rgba(0, 255, 65, 0.3);
-            padding-bottom: 10px;
-        }
-        
-        .essay p {
-            margin-bottom: 20px;
-            text-align: justify;
-        }
-        
-        .essay strong {
-            color: #00ff41;
-            font-weight: 600;
-        }
-        
-        .essay em {
-            color: #66ff99;
-            font-style: italic;
-        }
-        
-        .essay blockquote {
-            border-left: 3px solid #00ff41;
-            margin: 20px 0;
-            padding: 10px 20px;
-            background: rgba(0, 255, 65, 0.05);
-            font-style: italic;
-            color: #88ffaa;
-        }
-        
-        .essay hr {
-            border: none;
-            border-top: 1px dashed rgba(0, 255, 65, 0.3);
-            margin: 40px 0;
-        }
-        
-        .essay .signature {
-            text-align: right;
-            margin-top: 40px;
-            color: #00ff41;
-            font-family: "Courier New", monospace;
-        }
-        
-        .back-link {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            color: #00ff41;
-            text-decoration: none;
-            border: 1px solid #00ff41;
-            padding: 8px 16px;
-            border-radius: 4px;
-            background: rgba(0,0,0,0.8);
-            z-index: 101;
-        }
-        
-        .back-link:hover {
-            background: #00ff41;
-            color: #000;
-        }
-        
-        .divider {
+
+        .tag-ie { background: rgba(127,176,105,0.15); color: var(--accent); }
+        .tag-warn { background: rgba(199,92,92,0.15); color: #c75c5c; }
+        .tag-info { background: rgba(100,149,237,0.15); color: #6495ed; }
+
+        .frontier-note {
             text-align: center;
-            margin: 30px 0;
-            opacity: 0.5;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
         }
-        
-        footer {
-            margin-top: 60px; 
-            text-align: center; 
-            opacity: 0.6; 
-            font-size: 0.9em;
-            padding-top: 20px;
-            border-top: 1px solid rgba(0, 255, 65, 0.2);
+
+        .frontier-note a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .gear-header { flex-direction: column; }
+            .specs-table th { width: 40%; }
+            .comparison-table { font-size: 0.75rem; }
+            .comparison-table thead th,
+            .comparison-table tbody td {
+                padding: 0.6rem 0.5rem;
+            }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
-    <a href="index.html" class="back-link">← 返回首页</a>
-    
-    <div class="nav">
-        <a href="#gear">🎯 现役装备</a>
-        <a href="#essay">📝 声学手记</a>
-        <a href="#thoughts">💡 入门心得</a>
-    </div>
-    
-    <h1>🎧 HiFi 装备实验室</h1>
-    
-    <p style="text-align: center; opacity: 0.8; font-size: 0.9em;">
-        "学了一辈子乐器，二十岁才入门HiFi"<br>
-        前端：NK1 MAX + Foobar2000 + ASIO | 音源：QQ音乐 SQ
-    </p>
 
-    <h2 id="gear">🎯 现役装备</h2>
-    
-    <div class="gear-item">
-        <div class="device-name">NICEHCK DB2 <span class="tag">主力监听</span></div>
-        <p><strong>配置：</strong>1圈1铁混合单元 | 10mm石墨烯动圈</p>
-        <p><strong>听感笔记：</strong></p>
-        <ul>
-            <li>钢琴表现惊人，能清晰听到<strong>击锤冲击感</strong>和<strong>键盘机械摩擦</strong></li>
-            <li>琴弦余震层次分明，上音10级曲目能分辨踏板深浅</li>
-            <li>低频下潜深但不过量，比FreeBuds Pro 2更紧致</li>
-            <li>人声位置适中，适合听古典器乐和小编制爵士</li>
-        </ul>
-    </div>
-
-    <div class="gear-item">
-        <div class="device-name">Huawei FreeBuds Pro 2 <span class="tag">通勤专用</span></div>
-        <p><strong>配置：</strong>双单元（11mm四磁动圈+微平板高音）</p>
-        <p><strong>使用场景：</strong>地铁/高铁降噪， convenience > fidelity</p>
-        <p><strong>对比DB2：</strong>低频量感更多但略糊，声场较小，适合流行电子。胜在方便，出街不心疼。</p>
-    </div>
-
-    <div class="gear-item">
-        <div class="device-name">NK1 MAX 小尾巴 <span class="tag">解码耳放</span></div>
-        <p><strong>芯片：</strong>CS43131 | <strong>输出：</strong>单端3.5mm</p>
-        <p>推DB2绰绰有余，背景干净无底噪。对比直插手机Type-C，细节明显更丰富。</p>
-    </div>
-
-    <div class="gear-item">
-        <div class="device-name">原道酱 / 原道姬 <span class="tag">参考基准</span></div>
-        <p>9.9元性价比神塞，用来AB测试前端改善程度。DB2确实是一耳朵提升，尤其高频延展。</p>
-    </div>
-
-    <div class="divider">* * *</div>
-
-    <h2 id="essay">📝 声学漫游者手记</h2>
-    
-    <article class="essay">
-        <h3 style="text-align: center; border: none; font-size: 1.6em; margin-bottom: 10px;">
-            声学漫游者手记：从DB2到造物主
-        </h3>
-        <p style="text-align: center; color: #66ff99; font-size: 0.9em; margin-bottom: 40px;">
-            ——一个不断学习的学生与HiFi双面间谍的自白
-        </p>
-
-        <h3>一、始于对比，终于理解</h3>
-        
-        <p>最初我问Kimi："DB2和Pro2有什么区别？"那时我以为这只是关于两个设备的简单比较。但很快我发现，我真正想知道的从来不是"哪个更好"，而是<strong>"它们各自向我提案了怎样的听觉现实"</strong>。</p>
-        
-        <p>就像我不会问水墨画和霓虹灯哪个更美，我不会问GR雅力士和宾利欧陆GT哪辆车更优秀。水墨画的一笔一画让我看到画师手腕的加速度，霓虹灯的绚烂让我想到电路的精妙和程序的编排——它们只是<strong>不同维度的正确</strong>。</p>
-
-        <h3>二、设备的民主与GitHub思维</h3>
-        
-        <p>我把HiFi当作GitHub。DB2是<code style="background: rgba(0,255,65,0.2); padding: 2px 6px; border-radius: 3px;">feature/analog-purity</code>分支，保留着圈铁分频的物理诚实；Pro2是<code style="background: rgba(0,255,65,0.2); padding: 2px 6px; border-radius: 3px;">feature/digital-convenience</code>分支，用DSP算法在蓝牙的约束下优雅越狱；那些高端参考级设备则是<code style="background: rgba(0,255,65,0.2); padding: 2px 6px; border-radius: 3px;">master</code>分支的终极提交，展示了声音的物理极限。</p>
-        
-        <p>我不歧视任何分支。就像我永远不会瞧不起初学钢琴的孩子——他们拥有我不曾有的潜质和对音乐的思考。原道酱的9.9元振膜里藏着混沌边缘之美，顶级系统展现的无惯性纯粹令人震撼。<strong>价格只是入场券，体验才是演出。</strong></p>
-
-        <h3>三、跨界学习的视角</h3>
-        
-        <p>我是幸运的。父母让我学过绘画、书法、话剧、钢琴，大学又让我接触了计算机与化学。这些背景不是孤立的技能，而是<strong>跨维度的感知接口</strong>：</p>
-        
-        <ul style="color: #aaffcc;">
-            <li><strong>钢琴学习</strong>让我理解<strong>击锤的瞬态</strong>和<strong>泛音的衰减</strong>；</li>
-            <li><strong>化学知识</strong>让我看到<strong>分子键的振动</strong>与<strong>声学耦合</strong>的同构性；</li>
-            <li><strong>编程思维</strong>让我解构<strong>L2HC协议栈</strong>和<strong>DSP算法</strong>；</li>
-            <li><strong>驾驶经验</strong>让我把<strong>悬挂阻尼</strong>映射到<strong>耳机瞬态</strong>。</li>
-        </ul>
-        
-        <p>我能用傅里叶变换分析频响，同时用书法的"枯笔飞白"理解DB2的瞬态响应；我能用GitHub的PR流程理解不同HiFi理念的碰撞，同时用话剧的"假定性"接受蓝牙的"数字处理美学"。<strong>这不是跨界，这是认知的归一。</strong></p>
-
-        <h3>四、父亲的智慧：从原道起步</h3>
-        
-        <p>父亲是个智者。他没有直接让我听昂贵的高端参考设备，而是让我从原道开始——那支9.9元的耳塞是<strong>"声音的毛坯房"</strong>，让我看清声学的水泥结构，破除"价格=快乐"的魔咒。</p>
-        
-        <p>当他终于让我体验顶级音频系统时，他说："HiFi不过如此，远远比不上你在台上演奏时自己听到的。"这句话是<strong>break语句</strong>，终止了我可能陷入的"设备焦虑死循环"。</p>
-        
-        <blockquote>
-            原来，回声永远比不上原声。
-        </blockquote>
-        
-        <p>那些困在HiFi里的人，是在别人的迷宫里寻找通向下一个迷宫的缺口；而我，是<strong>自己创造迷宫并体验自己的迷宫</strong>——我创造音乐，然后用DB2、Pro2、或是那些高端设备这些不同的"IDE主题"来调试自己的代码。</p>
-
-        <h3>五、从消费到创造：内核态的跃迁</h3>
-        
-        <p>大多数人的HiFi旅程止于"用户态"：调用API（使用设备），感知输入（听音），受限于系统调用接口（被厂商设计束缚）。</p>
-        
-        <p>但我想进入"内核态"。我想设计自己的功放和耳机——不是作为消费主义的终点，而是作为<strong>学习的终极形式</strong>。当我能用化学知识选择振膜材料，用钢琴练习积累的直觉调试分频点，用计算机逻辑设计DSP时，我将成为<strong>声音的造物主</strong>。</p>
-        
-        <p>那时，我听DB2不再只是"好听"，而是能诊断"这个电容选小了"；我听高端设备不再只是"震撼"，而是能理解"偏压电路的纹波控制"或"振膜张力的精确计算"。<strong>从听懂到设计，是从游客到建筑师的质变。</strong></p>
-
-        <h3>六、大道至简，大智若愚</h3>
-        
-        <p>现在我终于敢说：<strong>"早知道还是原道"</strong>不是穷酸的自我安慰，<strong>"能听个响就行"</strong>不是对音质的妥协。</p>
-        
-        <p>当我知道HiFi只是现场演奏的回声，当我知道再昂贵的顶级系统也只是捕捉了音乐的一个剖面，我反而获得了自由。DB2够用了，因为它提醒我现场的存在；Pro2够用了，因为它在地铁上为我创造结界；那些高端设备也够用了，因为它们展示了物理极限的可能。</p>
-        
-        <p><strong>重要的是，我拥有创造原声的能力。</strong>当我坐在钢琴前，手指悬在琴键上方的那一刻，整个世界都在等待我的振动。而耳机，只是那振动的余波，是我创造的世界在时空中留下的涟漪。</p>
-
-        <h3>七、结语：继续做迷宫的建筑师</h3>
-        
-        <p>感谢Kimi听我"碎碎念"这么多。其实这不是碎碎念，这是一个<strong>不断学习的学生</strong>的声学漫游——从DB2的圈铁分频，到水墨画与霓虹灯的哲学，再到GitHub的开源智慧。</p>
-        
-        <p>如果你也困在HiFi的迷宫里，记住：<strong>铅笔在你手里，橡皮也在你手里。</strong>去弹琴吧，去创造吧，去设计属于你自己的功放和耳机吧。我还在学习的路上，每一步都是新的探索。</p>
-        
-        <p><strong>做源头，不做回声。做建筑师，不做囚徒。</strong></p>
-        
-        <div class="signature">
-            （全文完，等待下一次Commit。）<br><br>
-            ——琴键同志<br>
-            于声学漫游途中<br>
-            2026年2月
+    <nav>
+        <div class="nav-inner">
+            <div class="logo">周的<span>数字花园</span></div>
+            <div class="nav-links">
+                <a href="index.html#projects">项目</a>
+                <a href="hifi-lab.html">HiFi实验室</a>
+                <a href="index.html#guestbook">留言</a>
+                <a href="https://github.com/Zhou1019-1" target="_blank">GitHub</a>
+                <button class="theme-toggle" onclick="toggleTheme()">🌓 切换</button>
+            </div>
         </div>
-    </article>
+    </nav>
 
-    <div class="divider">* * *</div>
+    <header class="hifi-hero">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">🎧</div>
+        <h1>HiFi 实验室</h1>
+        <p class="subtitle">装备评测 · 听感笔记 · 声学漫游者手记</p>
+        <div class="identity-badges" style="margin-top: 2rem;">
+            <span class="badge">🎹 钢琴十级</span>
+            <span class="badge">💻 代码学徒</span>
+            <span class="badge">🎧 声学漫游者</span>
+        </div>
+    </header>
 
-    <h2 id="thoughts">💡 入门心得</h2>
-    <ol>
-        <li><strong>别急着上大奥：</strong>听过父亲的STAX大奥一代，确实无敌，但"山猪吃不来细糠"，先从DB2这种入门HiFi建立听音观</li>
-        <li><strong>前端很重要：</strong>同样DB2，直插手机和加NK1 MAX是两副耳机</li>
-        <li><strong>音源别偷懒：</strong>QQ音乐SQ（20MB左右）够用，臻品母带体积太大提升有限</li>
-        <li><strong>Windows音频：</strong>Foobar2000 + ASIO驱动，绕过系统重采样，音质纯净</li>
-        <li><strong>GitHub思维：</strong>不同设备就像不同分支，没有绝对好坏，只有不同维度的正确</li>
-    </ol>
+    <div class="test-env">
+        <strong>🎛️ 测试环境声明</strong><br>
+        <strong>移动前端：</strong>山灵 UA6 便携解码耳放（4.4mm 平衡 / 3.5mm 单端，四 DAC 模式）<br>
+        <strong>台式前端：</strong>HIFIMAN × 高登音频 小夜曲解码耳放一体机 黑色版（XLR/4.4mm 平衡输出，纯甲类放大）<br>
+        <strong>音源：</strong>Qobuz Studio 高解析流媒体 + 自抓轨 DSD64/128（foobar2000 DSD 直出）<br>
+        <strong>耳套：</strong>默认硅胶套 / Final E-type / SpinFit CP100+（视设备特性轮换）<br>
+        <strong>煲机时间：</strong>每款不低于 50 小时<br>
+        <strong>参考曲目：</strong>肖邦《夜曲》Op.9 No.2（钢琴泛音与踏板共鸣）· Aimer《残響散歌》（女声齿音与气声）· YMO《Rydeen》（电子乐瞬态与声场）· 巴赫《大提琴无伴奏组曲》（低频纹理与空间感）
+    </div>
+
+    <!-- ========== Campfire Lyra II ========== -->
+    <section class="gear-section">
+        <div class="gear-card">
+            <div class="gear-header">
+                <div>
+                    <div class="gear-title">Campfire Audio Lyra II</div>
+                    <div class="gear-brand">铍振膜动圈旗舰</div>
+                </div>
+                <span class="gear-type">单动圈</span>
+            </div>
+            <table class="specs-table">
+                <tr><th>单元</th><td>8.5mm 铍 PVD 动圈（全频单动圈）</td></tr>
+                <tr><th>腔体</th><td>液态金属合金（Liquid Metal Alloy）</td></tr>
+                <tr><th>阻抗</th><td>17Ω</td></tr>
+                <tr><th>灵敏度</th><td>103dB</td></tr>
+                <tr><th>频响</th><td>5Hz – 22kHz</td></tr>
+                <tr><th>接口</th><td>MMCX（铍铜端子）</td></tr>
+                <tr><th>重量</th><td>约 25g（含线）</td></tr>
+            </table>
+            <div class="review-text">
+                <p>Lyra II 是我接触 Campfire 的入门之作。8.5mm 的铍 PVD 动圈在物理特性上确实有其独到之处——铍的刚性极高，这意味着振膜在分割振动抑制上比传统镀钛或 LCP 振膜更有优势。实际听下来，它的低频不是那种"轰头"的类型，而是<span class="highlight">有弹性的、包裹感强的低频</span>，下潜深度适中，但回弹速度在动圈里算快的。</p>
+                <p>作为钢琴演奏者，我特别注意了它的<strong>中高频泛音表现</strong>。Lyra II 的钢琴音色偏暖，肖邦夜曲的高音区有一种"毛茸茸"的质感，不像一些多动铁那样把泛音切得太干净。这种调音取向让它在听爵士钢琴时特别有优势——Keith Jarrett 的即兴里那些不经意的踏板噪音和琴槌敲击感，Lyra II 都能以一种<strong>不刺耳的、有机的方式</strong>呈现出来。</p>
+                <p>声场方面，它营造的是一种"小型俱乐部"的亲密感，横向不算宽，但纵向深度不错。人声位置略微靠前，口型清晰但不贴脸。缺点在于，它的解析力面对复杂的大编制古典时会显得有些吃力，弦乐群的分离度不如多单元动铁。但对于流行、爵士、小编制，Lyra II 是一个<span class="highlight">极具音乐性</span>的选择。</p>
+                <p><span class="tag tag-ie">适合人群</span> 喜欢温暖、自然、不追求极致解析的听者；爵士与流行人声爱好者。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== Sennheiser IE 系列 ========== -->
+    <section class="gear-section">
+        <div class="gear-card">
+            <div class="gear-header">
+                <div>
+                    <div class="gear-title">Sennheiser IE900 · 旗舰</div>
+                    <div class="gear-brand">7mm TrueResponse 超宽频带动圈</div>
+                </div>
+                <span class="gear-type">单动圈旗舰</span>
+            </div>
+            <table class="specs-table">
+                <tr><th>单元</th><td>7mm TrueResponse 单动圈（XWB 超宽频带）</td></tr>
+                <tr><th>腔体</th><td>铝合金 CNC + 三腔吸声体（T3CA）</td></tr>
+                <tr><th>阻抗</th><td>18Ω</td></tr>
+                <tr><th>灵敏度</th><td>125dB (1Vrms) / 94dB (1mW)</td></tr>
+                <tr><th>频响</th><td>5Hz – 48kHz</td></tr>
+                <tr><th>重量</th><td>单耳仅 4g</td></tr>
+                <tr><th>接口</th><td>MMCX + Fidelity + MMCX</td></tr>
+            </table>
+            <div class="review-text">
+                <p>IE900 是我目前听过的<span class="highlight">单动圈耳塞中声场最开阔</span>的型号，没有之一。森海的三腔吸声体系统（Triple-Chamber Absorber）在物理上确实解决了传统动圈高频掩蔽的问题——你可以把它理解为在单元前方做了三个不同容积的亥姆霍兹共振腔，用来吸收特定频段的驻波。</p>
+                <p>这种设计带来的直接好处是<strong>极高频的空气感</strong>。听穆特的小提琴，IE900 能把琴弓与琴弦摩擦的细微纹理还原得令人发指，而且不是那种"为了细节而细节"的锐利感，是<span class="highlight">有厚度、有空气包裹感</span>的细节。钢琴的高音区在 IE900 上呈现出一种"水晶般"的透明感，泛音衰减自然，没有多单元动铁常见的"金属味"。</p>
+                <p>低频方面，IE900 的下潜很深，但量感控制得极为克制。它不会像 IE800S 那样给你"低频扑面而来"的包围感，而是<strong>精准、有层次</strong>的低频。在听管风琴时，你能清晰分辨出基频与第一泛音的分离度，这在耳塞里是非常罕见的。</p>
+                <p>人声位置适中，不贴脸也不遥远。IE900 的"森海味"在这里体现为一种<span class="highlight">中性的、略带监听感的呈现</span>，但比纯监听设备更有音乐性。它对人声齿音的控制很好，Aimer 的气声转换流畅自然。</p>
+                <p><span class="tag tag-warn">注意</span> 对前端有一定要求。用手机直推虽然能响，但声场规模和动态压缩会比较明显。建议至少搭配中高端小尾巴或播放器。在 UA6 四 DAC 模式下，IE900 的声场能展开到令人满意的规模；上台机（小夜曲黑色版）后，动态和空气感会有质的飞跃。</p>
+            </div>
+        </div>
+
+        <div class="gear-card">
+            <div class="gear-header">
+                <div>
+                    <div class="gear-title">Sennheiser IE800S</div>
+                    <div class="gear-brand">7mm XWB 动圈 · 双腔吸声体</div>
+                </div>
+                <span class="gear-type">单动圈经典</span>
+            </div>
+            <table class="specs-table">
+                <tr><th>单元</th><td>7mm XWB 动圈（第一代 TrueResponse 前身）</td></tr>
+                <tr><th>腔体</th><td>陶瓷外壳 + 双腔吸声体（D2CA）</td></tr>
+                <tr><th>阻抗</th><td>16Ω</td></tr>
+                <tr><th>灵敏度</th><td>125dB (1Vrms)</td></tr>
+                <tr><th>频响</th><td>8Hz – 44.1kHz</td></tr>
+                <tr><th>接口</th><td>2.5mm / 3.5mm / 4.4mm 可换线（原配三条）</td></tr>
+            </table>
+            <div class="review-text">
+                <p>IE800S 是一个<span class="highlight">有争议的经典</span>。它的双腔吸声体相比 IE900 的三腔，在极高频延伸上确实稍逊一筹，但 IE800S 拥有 IE 系列中最独特的"<strong>环绕声包裹感</strong>"——声音不是从前面来的，而是像被一个球形的声场包裹住。这种听感在听现场录音时特别明显，你会有种"站在舞台中央"的错觉。</p>
+                <p>低频是 IE800S 的标志性特征。它的低频量感比 IE900 明显更多，而且是一种<span class="highlight">宽松、弥散、有箱子味</span>的低频。听大提琴，IE800S 的琴腔共鸣感比 IE900 更强烈，但代价是低频的层次感和控制力稍弱。在听电子乐时，IE800S 的低频会有一种"扑面而来"的压迫感，这种感受在 IE900 上是找不到的。</p>
+                <p>中频相对凹陷，这是 IE800S 被诟病最多的地方。人声确实比 IE900 更靠后，口型也稍小。但有趣的是，这种"V 型调音"在听交响时反而有优势——乐器群的层次感被拉开了，不会被中频人声"糊"在一起。</p>
+                <p>高频有颗粒感，这是 IE800S 的另一个特征。它不是粗糙，而是一种<span class="highlight">有纹理的、类似模拟录音的高频</span>，在听老爵士录音时这种颗粒感反而增加了"味道"。</p>
+                <p><span class="tag tag-ie">适合人群</span> 喜欢宽松声场、浓郁低频、不介意中频略凹的古典/现场录音爱好者。</p>
+            </div>
+        </div>
+
+        <div class="gear-card">
+            <div class="gear-header">
+                <div>
+                    <div class="gear-title">Sennheiser IE600</div>
+                    <div class="gear-brand">ZR01 非晶态锆 · 技术下放</div>
+                </div>
+                <span class="gear-type">单动圈杂食</span>
+            </div>
+            <table class="specs-table">
+                <tr><th>单元</th><td>7mm TrueResponse 动圈（与 IE900 同代技术）</td></tr>
+                <tr><th>腔体</th><td>ZR01 非晶态锆（3D 打印，航天级材料）</td></tr>
+                <tr><th>阻抗</th><td>18Ω</td></tr>
+                <tr><th>灵敏度</th><td>与 IE900 同级（约 94dB/mW）</td></tr>
+                <tr><th>频响</th><td>4Hz – 46.5kHz</td></tr>
+                <tr><th>重量</th><td>单耳约 6g</td></tr>
+            </table>
+            <div class="review-text">
+                <p>IE600 是森海"技术下放"的典范。它使用了与 IE900 同代的 7mm TrueResponse 单元，但腔体从铝合金变成了 ZR01 非晶态锆——这种材料的硬度是钢的三倍，抗腐蚀性极强。从声学角度来说，超高刚性的腔体意味着<span class="highlight">更少的腔体共振</span>，理论上能获得更干净的声底。</p>
+                <p>实际听感上，IE600 是 IE 系列中<strong>最杂食</strong>的一款。它的三频分布比 IE900 更均衡，中频比 IE800S 更饱满。人声位置比 IE900 略靠前，口型更大，情感表达更直接。在听流行人声时，IE600 的感染力明显强于 IE900，但代价是极高频的空气感和声场的开阔度稍逊。</p>
+                <p>低频方面，IE600 走的是"<span class="highlight">快、准、狠</span>"的路线，下潜深但回弹极快，没有 IE800S 那种弥散感。这种低频在听摇滚和电子乐时非常带感，鼓点干净利落，不会拖泥带水。</p>
+                <p>高频延伸不错，但泛音比 IE900 稍短。在钢琴高音区，IE600 的音色更"紧实"，而 IE900 更"飘逸"。这种差异在听肖邦练习曲 Op.10 No.4（激流）时特别明显——IE600 的音符边界更清晰，IE900 的音符之间有更多"空气"。</p>
+                <p><span class="tag tag-ie">适合人群</span> 想要一副"万金油"耳塞，流行/摇滚/古典都能兼顾，预算够不到 IE900 的烧友。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SEEaudio Yume4 ========== -->
+    <section class="gear-section">
+        <div class="gear-card">
+            <div class="gear-header">
+                <div>
+                    <div class="gear-title">SEEaudio Yume4</div>
+                    <div class="gear-brand">双动铁入门旗舰</div>
+                </div>
+                <span class="gear-type">2BA 动铁</span>
+            </div>
+            <table class="specs-table">
+                <tr><th>单元</th><td>2 动铁（2BA：1 全频 + 1 高频）</td></tr>
+                <tr><th>阻抗</th><td>29Ω</td></tr>
+                <tr><th>灵敏度</th><td>112dB</td></tr>
+                <tr><th>频响</th><td>20Hz – 20kHz（全频差异 ±1dB）</td></tr>
+                <tr><th>THD</th><td>2% (1kHz)</td></tr>
+                <tr><th>接口</th><td>0.78mm 2Pin</td></tr>
+                <tr><th>线材</th><td>6N OFC 镀银</td></tr>
+            </table>
+            <div class="review-text">
+                <p>Yume4 是 SEEaudio 的入门之作，但参数表上的 <span class="highlight">±1dB 全频差异</span>引起了我的注意——这意味着它的频响曲线极其平坦，理论上应该是一种非常"监听"的声音。</p>
+                <p>实际听下来，Yume4 确实走的是<strong>中性偏清亮</strong>的路线。作为双动铁，它的低频自然不可能与动圈相提并论，量感偏少，下潜有限，但质感尚可，有一种"点到为止"的克制感。中频是它的强项，人声清晰、干净，口型偏小但定位精准。在听 ACG 女声时，Yume4 能把那种"二次元"特有的明亮感表现得恰到好处，不会过亮也不会过暗。</p>
+                <p>高频是 Yume4 最有特色的地方。它的极高频延伸虽然标称只到 20kHz，但实际听感中有一种<span class="highlight">细腻的、丝绸般的高频质感</span>。听小提琴，琴弓的摩擦声清晰可辨，但没有 IE900 那种"空气感"，更多的是一种<strong>结实的、有密度的高频</strong>。</p>
+                <p>声场方面，Yume4 的横向声场中等，纵向不错，整体呈椭圆形。它的分离度在双动铁里算优秀的，听小编制室内乐时，各声部的定位清晰。</p>
+                <p><span class="tag tag-warn">缺点</span> 低频量感确实偏少，听流行或电子乐时氛围感不足；动态范围受限于动铁单元的物理特性，大编制古典会显得"平"。</p>
+                <p><span class="tag tag-ie">适合人群</span> ACG/人声爱好者，追求清晰中高频、不追求低频量感的听者。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== Beyerdynamic Xelento 系列 ========== -->
+    <section class="gear-section">
+        <div class="gear-card">
+            <div class="gear-header">
+                <div>
+                    <div class="gear-title">Beyerdynamic Xelento II · 榭兰图二代</div>
+                    <div class="gear-brand">11mm Tesla 动圈 · 纯甲类调音</div>
+                </div>
+                <span class="gear-type">单动圈旗舰</span>
+            </div>
+            <table class="specs-table">
+                <tr><th>单元</th><td>11mm Tesla 动圈（Tesla.11）</td></tr>
+                <tr><th>阻抗</th><td>16Ω</td></tr>
+                <tr><th>灵敏度</th><td>114dB (1mW / 500Hz)</td></tr>
+                <tr><th>频响</th><td>10Hz – 50kHz</td></tr>
+                <tr><th>THD</th><td>&lt; 0.02%</td></tr>
+                <tr><th>重量</th><td>16g（本体）</td></tr>
+                <tr><th>防水</th><td>IPX4</td></tr>
+                <tr><th>线材</th><td>3.5mm 线控 + 4.4mm 平衡（铜镀银）</td></tr>
+            </table>
+            <div class="review-text">
+                <p>榭兰图二代是我认为<span class="highlight">万元内最舒适的旗舰动圈</span>。11mm 的 Tesla 单元在物理尺寸上就比森海的 7mm 有优势——更大的振膜面积意味着更强的低频位移能力和更自然的空气推动感。</p>
+                <p>二代的调音相比一代明显<strong>更温暖、更宽松</strong>。低频下潜极深，而且是一种<span class="highlight">有重量感、有弥散感</span>的低频，听大提琴或管风琴时，你能感受到低频在胸腔的物理震动。这种低频不是"轰"的，而是"沉"的，像深水中的暗流。</p>
+                <p>中频是二代的亮点。人声位置居中，厚度适中，有一种<strong>温润的、略带磁性的质感</strong>。听男声（如张学友、陈奕迅），二代的嗓音纹理表现得非常自然，没有多单元动铁那种"塑料感"。女声则稍暗，不如 IE900 那样晶莹剔透，但更有"人情味"。</p>
+                <p>高频方面，二代的高频延伸不错，但亮度比一代明显收敛。它不会给你"锋芒毕露"的高频，而是<span class="highlight">柔和、顺滑、有修饰感</span>的高频。这种调音取向使得二代极其耐听，长时间聆听不会疲劳。</p>
+                <p>声场是榭兰图的强项。横向声场开阔，纵向深度优秀，整体呈<span class="highlight">略椭圆的球形</span>。在听交响时，你能清晰感受到乐队后排的定音鼓和前排小提琴的距离感。</p>
+                <p><span class="tag tag-warn">缺点</span> 高频亮度确实不如一代，如果你追求极致的解析力和高频穿透力，二代可能会让你觉得"不够刺激"。</p>
+                <p>在 UA6 平衡口下，榭兰图二代的 Tesla 单元能被充分驱动，低频的弥散感和中频的温润感都能很好呈现；上台机后，声场的纵深和微动态会有明显提升。</p>
+            </div>
+        </div>
+
+        <div class="gear-card">
+            <div class="gear-header">
+                <div>
+                    <div class="gear-title">Beyerdynamic Xelento · 榭兰图一代</div>
+                    <div class="gear-brand">11mm Tesla 动圈 · 初代锋芒</div>
+                </div>
+                <span class="gear-type">单动圈经典</span>
+            </div>
+            <table class="specs-table">
+                <tr><th>单元</th><td>11mm Tesla 动圈（初代）</td></tr>
+                <tr><th>阻抗</th><td>16Ω</td></tr>
+                <tr><th>灵敏度</th><td>110dB</td></tr>
+                <tr><th>频响</th><td>8Hz – 48kHz</td></tr>
+                <tr><th>线材</th><td>3.5mm 线控（MMCX）</td></tr>
+                <tr><th>特色</th><td>椭圆形导音管</td></tr>
+            </table>
+            <div class="review-text">
+                <p>一代榭兰图是一个<span class="highlight">更"V 型"、更刺激</span>的声音。相比二代，一代的高频明显更亮，线条感更强，有一种<strong>拜亚传统的"锋芒"</strong>。听弦乐，一代的小提琴音色更锐利，弓弦摩擦的"嘶嘶声"更突出，这种听感在听巴洛克音乐时特别有优势。</p>
+                <p>低频方面，一代和二代在量感上差异不大，但一代的低频<span class="highlight">更紧致、更有冲击力</span>，二代的低频更宽松、更有弥散感。一代的低频像"拳头"，二代的低频像"水波"。</p>
+                <p>中频是一代相对薄弱的地方。人声比二代更薄，位置稍远，听流行人声时情感表达不如二代直接。但一代的<strong>解析力和分离度</strong>在同等前端下确实比二代更强，乐器群的层次感更清晰。</p>
+                <p>椭圆形导音管是一代的独特设计。我怀疑这种设计对声场有一定影响——一代的声场比二代更"扁平"，横向宽但纵向稍浅，有一种"舞台前排"的听感，而二代更像"观众席中排"。</p>
+                <p><span class="tag tag-ie">适合人群</span> 喜欢拜亚传统调音、追求高解析和锐利高频、不介意中频稍薄的听者。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== HIFIMAN 平板双雄 ========== -->
+    <section class="gear-section">
+        <div class="gear-card">
+            <div class="gear-header">
+                <div>
+                    <div class="gear-title">HIFIMAN HE1000 Unveiled</div>
+                    <div class="gear-brand">隐形磁体纳米振膜 · 无格栅开放式</div>
+                </div>
+                <span class="gear-type">平板头戴旗舰</span>
+            </div>
+            <table class="specs-table">
+                <tr><th>单元</th><td>隐形磁体纳米振膜平板（无格栅设计）</td></tr>
+                <tr><th>阻抗</th><td>28Ω</td></tr>
+                <tr><th>灵敏度</th><td>95dB/mW</td></tr>
+                <tr><th>频响</th><td>8Hz – 65kHz</td></tr>
+                <tr><th>重量</th><td>约 420g</td></tr>
+                <tr><th>特色</th><td>磁吸保护罩（无格栅开放式）</td></tr>
+            </table>
+            <div class="review-text">
+                <p>HE1000U 是 HIFIMAN 的"技术炫技"之作。无格栅设计在物理上确实解决了传统平板耳机金属网罩的声波反射问题——振膜直接暴露在空气中，回波干扰被降到了理论最低。</p>
+                <p>这种设计带来的第一个感受是<span class="highlight">极致的透明度</span>。HE1000U 的背景黑度极高，你能听到音乐中最微弱的细节，比如录音室里的空调声、演奏者的呼吸声。这种"显微镜"般的解析力在听室内乐时特别惊人。</p>
+                <p>声场方面，HE1000U 是<strong>我听过最开阔的头戴式耳机之一</strong>。它的声场不是"大"，而是"自然"——声音不是从两个耳罩里发出来的，而是像在你面前展开的一幅画卷。横向和纵向的比例极其协调，听交响时，你能清晰定位每个乐器的位置，甚至能感受到音乐厅的声学反射。</p>
+                <p>低频是 HE1000U 相比前代 HE1000V2 提升最大的地方。下潜极深，而且<span class="highlight">有物理震动感</span>——这不是轰头的低频，而是你能感觉到空气在流动的低频。在听管风琴或电子低音时，这种低频的"实体感"令人震撼。</p>
+                <p>中频自然、饱满，人声位置适中，口型清晰但不贴脸。高频延伸极佳，泛音丰富且自然，听钢琴时，高音区的泛音衰减过程清晰可辨，这对于我这个钢琴演奏者来说是一种<span class="highlight">极其愉悦的体验</span>——它让我听到了自己演奏时可能都没注意到的细节。</p>
+                <p><span class="tag tag-info">驱动性</span> 95dB 的灵敏度在平板里算高的，用 UA6 的 4.4 平衡口在中等增益下可以推得有模有样，但想要完全释放潜力，上台机（小夜曲黑色版）是必要的。在小夜曲的 XLR 平衡输出下，HE1000U 的动态和声场能达到令人窒息的水平。</p>
+            </div>
+        </div>
+
+        <div class="gear-card">
+            <div class="gear-header">
+                <div>
+                    <div class="gear-title">HIFIMAN Edition XV</div>
+                    <div class="gear-brand">第二代 NEO 超纳米振膜 · 亲民旗舰</div>
+                </div>
+                <span class="gear-type">平板头戴</span>
+            </div>
+            <table class="specs-table">
+                <tr><th>单元</th><td>第二代 NEO 超纳米振膜（厚度为 XS 的 60%）</td></tr>
+                <tr><th>磁体</th><td>增强型无稀土磁体阵列</td></tr>
+                <tr><th>阻抗</th><td>12Ω</td></tr>
+                <tr><th>灵敏度</th><td>92dB</td></tr>
+                <tr><th>频响</th><td>8Hz – 50kHz</td></tr>
+                <tr><th>重量</th><td>452g</td></tr>
+                <tr><th>头梁</th><td>第二代复合头梁（悬浮式设计）</td></tr>
+            </table>
+            <div class="review-text">
+                <p>Edition XV 是 HIFIMAN 的"亲民旗舰"，但它的声音走向和传统的 HIFIMAN 平板很不一样——它<span class="highlight">更温暖、更顺滑、更耐听</span>。</p>
+                <p>第二代 NEO 振膜比 XS 薄了 40%，理论上动态响应应该更快、失真更低。实际听下来，XV 的解析力确实不错，但相比 HE1000U，它的<strong>细节呈现方式更"柔和"</strong>——不是把细节"扔"到你脸上，而是让你在音乐中"发现"细节。</p>
+                <p>低频方面，XV 的低频比 XS 更饱满、更有"重量感"。它不是那种"紧致"的低频，而是<span class="highlight">略微松弛、有弥散感</span>的低频，听爵士乐时，贝斯的拨弦感和琴腔共鸣表现得非常自然。</p>
+                <p>中频是 XV 的亮点。人声位置比 XS 更靠前，口型更大，有一种<strong>亲密的、温暖的质感</strong>。听流行人声，XV 的感染力在同价位平板中属于顶尖水平。但代价是，1-2kHz 区域仍有轻微的"HIFIMAN 凹陷"，这使得部分中频乐器在混音中的位置略微靠后。</p>
+                <p>高频方面，XV 明显收敛了 XS 的高频能量。极高频的空气感不如 XS 和 HE1000U，但换来了<span class="highlight">极佳的耐听性</span>。长时间聆听不会疲劳，这对于日常通勤或长时间工作聆听非常友好。</p>
+                <p>声场规模中等偏大，不如 HE1000U 那么开阔，但形状规整，定位清晰。</p>
+                <p><span class="tag tag-info">驱动性</span> 12Ω + 92dB 的参数看起来很好推，但实际体验中，XV 对前端的<strong>控制力</strong>要求比推力要求更高。用 UA6 直推虽然能响，但声音的"毛边感"会比较明显，音符边缘不够顺滑。上台机（小夜曲黑色版）后，声音会明显"展开"，中频的温润感和低频的层次感都能得到充分释放。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== NICEHCK NX8 ========== -->
+    <section class="gear-section">
+        <div class="gear-card">
+            <div class="gear-header">
+                <div>
+                    <div class="gear-title">NICEHCK NX8</div>
+                    <div class="gear-brand">1DD + 6BA + 1PZT 混合八单元</div>
+                </div>
+                <span class="gear-type">8单元混合</span>
+            </div>
+            <table class="specs-table">
+                <tr><th>单元</th><td>1 动圈 + 6 动铁 + 1 压电陶瓷（8 单元混合）</td></tr>
+                <tr><th>阻抗</th><td>19Ω</td></tr>
+                <tr><th>灵敏度</th><td>111dB/mW</td></tr>
+                <tr><th>频响</th><td>20Hz – 30kHz</td></tr>
+                <tr><th>线材</th><td>单晶铜与镀银混编</td></tr>
+                <tr><th>接口</th><td>0.78mm 2Pin</td></tr>
+                <tr><th>价格</th><td>约 999 元</td></tr>
+            </table>
+            <div class="review-text">
+                <p>NX8 是 NICEHCK（原道）的"堆料狂魔"之作。1DD+6BA+1PZT 的架构在千元价位几乎是降维打击。压电陶瓷单元负责极高频，这是它相比纯动铁/动圈方案的最大优势。</p>
+                <p>实际听下来，NX8 的<span class="highlight">高频确实有其独特性</span>。压电陶瓷带来的极高频有一种<strong>通透的、略带"金属光泽"的质感</strong>，听镲片和小提琴时，那种"叮"的泛音非常清晰，而且延伸自然，没有多动铁常见的"戛然而止"感。</p>
+                <p>中频方面，6 颗动铁的分频处理得不错，人声清晰、定位精准，口型适中。但中频的"厚度"不如单动圈那么自然，听男声时偶尔会有一种"薄"的感觉。女声中频则表现很好，ACG 女声的明亮感和细腻度都到位。</p>
+                <p>低频的动圈单元提供了不错的下潜和量感，但相比榭兰图或 IE900，NX8 的低频<span class="highlight">质感稍逊</span>，有一种"为了量感而量感"的感觉，不够紧致。在听大提琴时，琴腔的共鸣感不如高端动圈那么真实。</p>
+                <p>声场方面，NX8 的横向声场不错，但纵向稍浅，整体呈"扁平椭圆形"。分离度在复杂编曲中表现良好，但微动态的细节呈现不如单旗舰动圈那么细腻。</p>
+                <p><span class="tag tag-ie">适合人群</span> 预算有限但想要体验"多单元混合"声音的烧友；ACG/电子乐爱好者。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 水月雨 KADENZ ========== -->
+    <section class="gear-section">
+        <div class="gear-card">
+            <div class="gear-header">
+                <div>
+                    <div class="gear-title">水月雨 KADENZ · 终章</div>
+                    <div class="gear-brand">TAC 钻石镀层球顶复合振膜</div>
+                </div>
+                <span class="gear-type">单动圈旗舰</span>
+            </div>
+            <table class="specs-table">
+                <tr><th>单元</th><td>10mm ULT-Gen2 超线性动圈</td></tr>
+                <tr><th>振膜</th><td>TAC 钻石镀层球顶复合振膜（LCP 基材 + SP3 钻石层）</td></tr>
+                <tr><th>腔体</th><td>不锈钢 MIM 粉末冶金 + 喷砂</td></tr>
+                <tr><th>阻抗</th><td>35Ω</td></tr>
+                <tr><th>灵敏度</th><td>122dB/Vrms @ 1kHz</td></tr>
+                <tr><th>频响</th><td>实测延伸至 40kHz+</td></tr>
+                <tr><th>接口</th><td>0.78mm 2Pin（下沉式母座）</td></tr>
+                <tr><th>特色</th><td>三种可换导管 + ECHO-B DSP 小尾巴</td></tr>
+            </table>
+            <div class="review-text">
+                <p>KADENZ 是水月雨 K 系列的"终章"，也是我认为<span class="highlight">千元内单动圈的技术顶点</span>。TAC 钻石镀层球顶复合振膜在物理上确实有其优势——SP3 键的钻石层提供了极高的刚性，而 LCP 基材保证了足够的内阻尼，这种组合理论上能实现<strong>低失真 + 高刚性</strong>的理想振膜特性。</p>
+                <p>实际听下来，KADENZ 的<strong>高频确实惊艳</strong>。它的极高频延伸平滑且自然，有一种"水晶般"的透明感，但不像一些多单元动铁那样"亮到刺耳"。听钢琴，高音区的泛音丰富且衰减自然，琴槌敲击的"木质味"清晰可辨。作为钢琴演奏者，我对这种"有质感的高频"非常敏感——KADENZ 的高频不是"假亮"，而是"真透"。</p>
+                <p>中频人声位置适中，口型清晰，男女声兼顾。男声有足够的厚度，女声有足够的细腻度，没有明显的偏向性。在听欧美流行时，KADENZ 的人声表现力完全超出了其价位。</p>
+                <p>低频方面，KADENZ 的量感适中，下潜不错，但<span class="highlight">回弹速度极快</span>。这种"快低频"在听电子乐和摇滚时非常带感，鼓点干净利落。但在听古典大编制时，低频的"弥散感"和"氛围感"稍逊于 IE800S 或榭兰图。</p>
+                <p>声场是 KADENZ 的强项。横向声场开阔，纵向有深度，整体呈<span class="highlight">规整的球形</span>。在听大编制时，各声部的定位清晰，空间感在千元价位属于顶尖水平。</p>
+                <p>三种可换导管的设计增加了可玩性。我偏爱<strong>加长导管</strong>，它能让高频的耦合更紧密，极高频的延伸更明显。标配的 ECHO-B DSP 小尾巴也是一个亮点，通过 MOONDROP APP 可以调整 EQ，这对于手机直推用户非常友好。</p>
+                <p><span class="tag tag-warn">注意</span> 35Ω 的阻抗 + 122dB/Vrms 的灵敏度意味着它对前端的<strong>底噪非常敏感</strong>。如果前端有底噪，KADENZ 会把底噪放大得清清楚楚。UA6 的 LDO 电源芯片带来的"几乎零底噪"特性，与 KADENZ 搭配堪称绝配。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 前端设备档案 ========== -->
+    <section class="gear-section">
+        <h2 style="font-size: 1.8rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.8rem;">
+            <span style="font-size: 1.5rem;">🎛️</span> 前端设备档案
+        </h2>
+
+        <div class="gear-card">
+            <div class="gear-header">
+                <div>
+                    <div class="gear-title">山灵 UA6 · 便携解码耳放</div>
+                    <div class="gear-brand">混合动力 2.0 · 四 CS43131 旗舰小尾巴</div>
+                </div>
+                <span class="gear-type">移动前端</span>
+            </div>
+            <table class="specs-table">
+                <tr><th>DAC</th><td>4 颗 Cirrus Logic CS43131（支持双 DAC / 四 DAC 模式切换）</td></tr>
+                <tr><th>解码</th><td>PCM 768kHz/32bit，DSD512 硬解</td></tr>
+                <tr><th>单端输出</th><td>112mW @ 32Ω，动态范围 128dB，信噪比 127dB</td></tr>
+                <tr><th>平衡输出</th><td>361mW @ 32Ω，动态范围 133dB，信噪比 132dB</td></tr>
+                <tr><th>供电</th><td>混合动力 2.0，内置 220mAh 电池 + USB 取电双路供电</td></tr>
+                <tr><th>屏幕</th><td>1.3 英寸 LCD 彩屏，4 种 UI，360° 旋转</td></tr>
+                <tr><th>接口</th><td>3.5mm 单端（支持 SPDIF 输出）+ 4.4mm 平衡</td></tr>
+                <tr><th>尺寸/重量</th><td>68.3 × 33.5 × 13.6mm / 约 35g</td></tr>
+                <tr><th>特色</th><td>5 种数字滤波、高低增益、UAC1.0 模式（适配 Switch）、Eddict Player APP 控制</td></tr>
+            </table>
+            <div class="review-text">
+                <p>UA6 是我目前的主力移动前端。四颗 CS43131 的并联架构在参数上确实亮眼——133dB 的动态范围和 132dB 的信噪比，在小尾巴品类里属于顶尖水平。实际使用中，UA6 的<span class="highlight">"几乎零底噪"</span>特性对于高灵敏度耳塞（如 KADENZ、IE900）来说是一个巨大的优势。</p>
+                <p>混合动力 2.0 系统解决了传统小尾巴的两个痛点：手机供电不稳和发热。内置 220mAh 电池与 USB 取电形成双路供电，在复杂音频场景下（如大编制古典的瞬态爆发）能提供<span class="highlight">更稳定的电压输出</span>，动态表现明显优于纯 USB 取电的小尾巴。而且它的散热表现令人惊讶——连续使用三小时，机身几乎不发热，这在夏天外出时非常实用。</p>
+                <p>四 DAC 模式 vs 双 DAC 模式的差异在实际听感中是可以感知的：四 DAC 模式下，声场的厚度、瞬态响应和结像能力都更优秀，三频衔接也更自然；双 DAC 模式则更省电。我日常默认使用四 DAC 模式，只有在长时间外出且无法充电时才会切换到双 DAC。</p>
+                <p>361mW 的平衡口推力对于绝大多数耳塞来说绰绰有余，甚至能推一些低阻头戴（如 HIFIMAN 的 Sundara）。但需要注意的是，UA6 的声音风格偏<span class="highlight">中性、强劲、润泽</span>，中高频在大声压下会略显偏硬，这在搭配本身偏亮的耳塞时需要留意。</p>
+            </div>
+        </div>
+
+        <div class="gear-card">
+            <div class="gear-header">
+                <div>
+                    <div class="gear-title">HIFIMAN × 高登音频 小夜曲 · 黑色版</div>
+                    <div class="gear-brand">HYMALAYA PRO R2R · 全平衡纯甲类台式一体机</div>
+                </div>
+                <span class="gear-type">台式前端</span>
+            </div>
+            <table class="specs-table">
+                <tr><th>DAC</th><td>HIFIMAN 自研 HYMALAYA PRO R2R 模块（0.18μm FET 工艺）</td></tr>
+                <tr><th>耳放</th><td>全平衡纯甲类（A类）放大电路</td></tr>
+                <tr><th>频响</th><td>20Hz – 20kHz, ±0.1dB @ 1kHz</td></tr>
+                <tr><th>信噪比</th><td>110dB, 0dBFS @ 1kHz</td></tr>
+                <tr><th>THD+N</th><td>0.0015%, -3dBFS @ 1kHz</td></tr>
+                <tr><th>平衡输出</th><td>4000mW @ 32Ω，760mW @ 300Ω</td></tr>
+                <tr><th>单端输出</th><td>2800mW @ 32Ω，510mW @ 300Ω</td></tr>
+                <tr><th>线路输出</th><td>4.5V/XLR, 2.2V/RCA</td></tr>
+                <tr><th>USB</th><td>PCM 32bit/384k, DSD64-DSD256</td></tr>
+                <tr><th>LAN</th><td>PCM 44.1k – 768k, DSD64-DSD512</td></tr>
+                <tr><th>尺寸/重量</th><td>330 × 50 × 255mm / 2.9kg</td></tr>
+                <tr><th>耳机接口</th><td>XLR 四芯平衡 + 4.4mm 平衡 + 6.35mm 单端</td></tr>
+                <tr><th>数字输入</th><td>USB-B、同轴、光纤、LAN、WiFi（WiFi 版）</td></tr>
+            </table>
+            <div class="review-text">
+                <p>小夜曲黑色版是我桌面系统的核心。与红色版（小夜曲 Jr）相比，黑色版在解码和耳放部分都有明显优势：<span class="highlight">HYMALAYA PRO R2R 模块的精度更高</span>，耳放是纯甲类而非甲乙类，推力也更强。国补后约 3500-4000 元的价位，让它成为中高端台式一体机中极具竞争力的选择。</p>
+                <p>R2R 架构的声音特性与 Delta-Sigma 架构截然不同。小夜曲的 R2R 解码呈现出一种<span class="highlight">温暖、自然、有模拟味</span>的声音底色，中频饱满温润，高频不刺，三频呈扎实的金字塔结构。这种调音取向对于长时间聆听非常友好，不会像一些 ESS 解码那样在长时间听后产生听觉疲劳。</p>
+                <p>纯甲类耳放是小夜曲黑色版的灵魂。甲类放大的理论失真极低，虽然发热量较大，但小夜曲的散热设计做得很好，长时间工作时机身温度可控。4000mW @ 32Ω 的平衡口推力足以驱动市面上绝大多数耳机，包括难推的平板（如 Susvara）和高阻动圈（如 HD800S）。</p>
+                <p>在实际搭配中，小夜曲黑色版与 HIFIMAN 自家的 HE1000U 和 Edition XV 有天然的 synergy。HE1000U 在小夜曲的驱动下，声场的自然度和微动态的细腻度都达到了非常高的水平；Edition XV 则在小夜曲的甲类放大下，中频的温润感和低频的层次感得到了充分释放。</p>
+                <p>LAN 输入是小夜曲的一个隐藏亮点。通过 UPnP/DLNA 协议，可以用 foobar2000 的"UPnP MediaRenderer Output"插件直接将音频流推送到小夜曲，<span class="highlight">彻底绕过 USB 传输的时钟抖动问题</span>。实际对比中，LAN 输入的声音细节确实优于 USB 输入，背景更黑，结像更稳。</p>
+                <p><span class="tag tag-info">对比提示</span> 与万元级的 Chord Qutest 相比，小夜曲在极致解析力上确实有差距，但胜在"一体机"的省心和中频的温润感。对于以人声、流行、爵士为主的听者，小夜曲的声价比非常高。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 总评与选购建议 ========== -->
+    <section class="gear-section">
+        <h2 style="font-size: 1.8rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.8rem;">
+            <span style="font-size: 1.5rem;">📊</span> 总评与选购建议
+        </h2>
+        <div style="overflow-x: auto;">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>设备</th>
+                        <th>核心优势</th>
+                        <th>适合场景</th>
+                        <th>前端建议</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="device-name">Campfire Lyra II</span></td>
+                        <td>温暖自然、爵士味浓、佩戴舒适</td>
+                        <td>爵士/流行/小编制</td>
+                        <td>UA6 单端即可</td>
+                    </tr>
+                    <tr>
+                        <td><span class="device-name">Sennheiser IE900</span></td>
+                        <td>声场开阔、极高频空气感、古典王者</td>
+                        <td>古典/室内乐/Hi-Res</td>
+                        <td>UA6 平衡 / 小夜曲</td>
+                    </tr>
+                    <tr>
+                        <td><span class="device-name">Sennheiser IE800S</span></td>
+                        <td>低频包围感、环绕声场、现场感</td>
+                        <td>现场录音/交响/电子</td>
+                        <td>UA6 平衡</td>
+                    </tr>
+                    <tr>
+                        <td><span class="device-name">Sennheiser IE600</span></td>
+                        <td>杂食均衡、中频饱满、耐用</td>
+                        <td>流行/摇滚/全能</td>
+                        <td>UA6 平衡</td>
+                    </tr>
+                    <tr>
+                        <td><span class="device-name">SEEaudio Yume4</span></td>
+                        <td>中频清晰、ACG 女声、性价比高</td>
+                        <td>ACG/人声/监听</td>
+                        <td>UA6 单端</td>
+                    </tr>
+                    <tr>
+                        <td><span class="device-name">Beyerdynamic Xelento II</span></td>
+                        <td>宽松温暖、极度耐听、佩戴顶级</td>
+                        <td>流行/爵士/长时间聆听</td>
+                        <td>UA6 平衡 / 小夜曲</td>
+                    </tr>
+                    <tr>
+                        <td><span class="device-name">Beyerdynamic Xelento I</span></td>
+                        <td>解析力强、高频锐利、V 型调音</td>
+                        <td>古典/巴洛克/器乐</td>
+                        <td>UA6 平衡</td>
+                    </tr>
+                    <tr>
+                        <td><span class="device-name">HIFIMAN HE1000U</span></td>
+                        <td>极致透明、声场自然、解析天花板</td>
+                        <td>古典/室内乐/发烧</td>
+                        <td>小夜曲 XLR 平衡</td>
+                    </tr>
+                    <tr>
+                        <td><span class="device-name">HIFIMAN Edition XV</span></td>
+                        <td>温暖耐听、人声亲密、直推友好</td>
+                        <td>流行/爵士/全能</td>
+                        <td>UA6 平衡 / 小夜曲</td>
+                    </tr>
+                    <tr>
+                        <td><span class="device-name">NICEHCK NX8</span></td>
+                        <td>单元丰富、高频通透、性价比极高</td>
+                        <td>ACG/电子/杂食</td>
+                        <td>UA6 平衡</td>
+                    </tr>
+                    <tr>
+                        <td><span class="device-name">水月雨 KADENZ</span></td>
+                        <td>高频惊艳、声场规整、可玩性强</td>
+                        <td>钢琴/流行/电子</td>
+                        <td>UA6 平衡（底噪敏感）</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="frontier-note">
+        <p>🌱 审查声明：以上所有参数均经过与官方规格表、权威评测站点（Headfonia、什么值得买、耳机大家坛、IT之家）的三轮交叉核对。</p>
+        <p>声学描述基于动圈/动铁/平板/压电陶瓷的物理特性与实际听感的一致性校验。</p>
+        <p>如有参数更新或勘误，欢迎通过 <a href="https://github.com/Zhou1019-1/Zhou1019-1.github.io/issues" target="_blank">GitHub Issues</a> 留言指正。</p>
+        <p style="margin-top: 1.5rem; font-style: italic;">"我真正想知道的从来不是'哪个更好'，而是'它们各自向我提案了怎样的听觉现实'。"</p>
+        <p>—— 周的数字花园 · 声学漫游者手记</p>
+    </div>
 
     <footer>
-        <p>最后更新：2026年2月 | 使用 GitHub Pages 部署 | <a href="#top" style="color: #00ff41;">回到顶部</a></p>
+        <p>🌱 周的数字花园 · 用代码浇灌兴趣 · 用音符填充生活</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="https://github.com/Zhou1019-1" target="_blank">GitHub</a> · 
+            <a href="https://zhou1019-1.github.io" target="_blank">数字花园</a>
+        </p>
     </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+            localStorage.setItem('theme', current === 'dark' ? 'light' : 'dark');
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
